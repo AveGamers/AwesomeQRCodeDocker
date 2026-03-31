@@ -5,7 +5,8 @@ RUN apk add --no-cache libc6-compat
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci --ignore-scripts && \
+RUN apk add --no-cache python3 make g++ && \
+    npm ci --ignore-scripts && \
     npm rebuild better-sqlite3
 
 FROM base AS builder

@@ -27,6 +27,7 @@ export function Header() {
             {t("generate")}
           </Link>
           {config.featureSwagger && (
+            // eslint-disable-next-line @next/next/no-html-link-for-pages
             <a
               href="/api/docs"
               className="rounded-md px-3 py-1.5 transition-colors hover:bg-accent"
