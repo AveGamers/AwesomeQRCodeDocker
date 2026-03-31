@@ -1,0 +1,296 @@
+{
+  "common": {
+    "loading": "Laden…",
+    "error": "Ein Fehler ist aufgetreten",
+    "copy": "Kopieren",
+    "copied": "Kopiert!",
+    "download": "Herunterladen",
+    "generate": "Generieren",
+    "reset": "Zurücksetzen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "back": "Zurück",
+    "learnMore": "Mehr erfahren"
+  },
+  "nav": {
+    "home": "Startseite",
+    "generate": "Generator",
+    "stats": "Statistiken",
+    "privacy": "Datenschutz",
+    "imprint": "Impressum",
+    "apiDocs": "API-Dokumentation"
+  },
+  "landing": {
+    "hero": {
+      "title": "QR-Codes sofort erstellen",
+      "subtitle": "Kostenlos, schnell & vollständig anpassbar. QR-Codes für Links, Texte, WLAN, Kontakte und mehr.",
+      "cta": "Jetzt loslegen"
+    },
+    "features": {
+      "title": "Funktionen",
+      "types": {
+        "title": "Viele QR-Typen",
+        "description": "URLs, Text, WLAN, Telefon, E-Mail, SMS, Standorte, Termine und Kontakte."
+      },
+      "customization": {
+        "title": "Volle Anpassbarkeit",
+        "description": "Farben, Verläufe, Formen, Logos und Stile passend zu deiner Marke."
+      },
+      "analytics": {
+        "title": "Optionale Statistiken",
+        "description": "Tracke Scans mit Kurzlinks. Geo-Daten, Browser und Klickzahlen einsehen."
+      },
+      "privacy": {
+        "title": "Datenschutz zuerst",
+        "description": "Self-hosted mit konfigurierbarem Tracking. Deine Daten bleiben auf deinem Server."
+      },
+      "noAccount": {
+        "title": "Kein Konto nötig",
+        "description": "QR-Codes sofort generieren – ohne Registrierung."
+      },
+      "openSource": {
+        "title": "Open Source",
+        "description": "Docker-basiert, vollständig per Umgebungsvariablen konfigurierbar."
+      }
+    }
+  },
+  "generator": {
+    "title": "QR-Code Generator",
+    "type": {
+      "label": "QR-Typ",
+      "url": "URL",
+      "text": "Text",
+      "wifi": "WLAN",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "sms": "SMS",
+      "geo": "Standort",
+      "event": "Termin",
+      "vcard": "Kontakt"
+    },
+    "fields": {
+      "url": {
+        "url": "URL",
+        "urlPlaceholder": "https://beispiel.de"
+      },
+      "text": {
+        "content": "Textinhalt",
+        "contentPlaceholder": "Gib deinen Text ein…"
+      },
+      "wifi": {
+        "ssid": "Netzwerkname (SSID)",
+        "password": "Passwort",
+        "encryption": "Verschlüsselung",
+        "hidden": "Verstecktes Netzwerk",
+        "wpa": "WPA/WPA2",
+        "wep": "WEP",
+        "none": "Keine"
+      },
+      "phone": {
+        "number": "Telefonnummer",
+        "numberPlaceholder": "+49 123 4567890"
+      },
+      "email": {
+        "to": "E-Mail-Adresse",
+        "toPlaceholder": "name@beispiel.de",
+        "subject": "Betreff",
+        "body": "Nachricht"
+      },
+      "sms": {
+        "number": "Telefonnummer",
+        "numberPlaceholder": "+49 123 4567890",
+        "message": "Nachricht"
+      },
+      "geo": {
+        "latitude": "Breitengrad",
+        "longitude": "Längengrad",
+        "query": "Suchanfrage (optional)"
+      },
+      "event": {
+        "title": "Titel",
+        "location": "Ort",
+        "startDate": "Beginn",
+        "endDate": "Ende",
+        "description": "Beschreibung"
+      },
+      "vcard": {
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "phone": "Telefon",
+        "email": "E-Mail",
+        "organization": "Organisation",
+        "url": "Website",
+        "address": "Adresse"
+      }
+    },
+    "style": {
+      "title": "Stiloptionen",
+      "colors": "Farben",
+      "foreground": "Vordergrund",
+      "background": "Hintergrund",
+      "gradientEnabled": "Verlauf aktivieren",
+      "gradientType": "Verlaufstyp",
+      "gradientColorEnd": "Verlauf-Endfarbe",
+      "linear": "Linear",
+      "radial": "Radial",
+      "dotStyle": "Punkt-Stil",
+      "cornerSquareStyle": "Eck-Quadrat-Stil",
+      "cornerDotStyle": "Eck-Punkt-Stil",
+      "styles": {
+        "square": "Eckig",
+        "rounded": "Abgerundet",
+        "dots": "Punkte",
+        "classy": "Klassisch",
+        "classyRounded": "Klassisch Rund",
+        "extraRounded": "Extra Rund",
+        "dot": "Punkt"
+      },
+      "logo": "Logo-Overlay",
+      "logoUpload": "Bild hochladen",
+      "logoRemove": "Entfernen",
+      "logoHint": "Transparentes PNG empfohlen. Max. {ratio}% der QR-Fläche.",
+      "errorCorrection": "Fehlerkorrektur",
+      "ecLevels": {
+        "L": "Niedrig (7%)",
+        "M": "Mittel (15%)",
+        "Q": "Quartil (25%)",
+        "H": "Hoch (30%)"
+      },
+      "size": "Größe (px)",
+      "margin": "Ruhezone"
+    },
+    "tracking": {
+      "title": "Tracking & Kurzlink",
+      "enable": "Scan-Tracking aktivieren",
+      "enableHint": "Erstellt einen getrackten Kurzlink mit Scan-Statistiken.",
+      "shortLink": "Kurzlink",
+      "statsLink": "Statistiken ansehen",
+      "statsHint": "Teile diesen Link, um Scan-Statistiken einzusehen.",
+      "disabled": "Tracking ist vom Administrator deaktiviert.",
+      "unavailable": "Tracking erfordert die aktivierte Analytics-Funktion."
+    },
+    "preview": {
+      "title": "Vorschau",
+      "empty": "Konfiguriere deinen QR-Code, um die Vorschau zu sehen.",
+      "scanWarning": "Dieser QR-Code könnte schwer zu scannen sein. Versuche, die Logo-Größe zu reduzieren oder den Stil zu vereinfachen."
+    },
+    "export": {
+      "title": "Export",
+      "png": "PNG herunterladen",
+      "svg": "SVG herunterladen"
+    }
+  },
+  "stats": {
+    "title": "Scan-Statistiken",
+    "totalScans": "Scans gesamt",
+    "uniqueVisitors": "Eindeutige Besucher",
+    "topCountries": "Top-Länder",
+    "topBrowsers": "Top-Browser",
+    "topOS": "Top-Betriebssysteme",
+    "topReferrers": "Top-Referrer",
+    "timeline": "Scans im Zeitverlauf",
+    "noData": "Noch keine Scan-Daten vorhanden.",
+    "shortLink": "Kurzlink",
+    "createdAt": "Erstellt am",
+    "qrType": "QR-Typ",
+    "target": "Ziel",
+    "notFound": "Statistiken nicht gefunden. Der Link ist ungültig oder abgelaufen.",
+    "period": {
+      "label": "Zeitraum",
+      "7d": "Letzte 7 Tage",
+      "30d": "Letzte 30 Tage",
+      "90d": "Letzte 90 Tage",
+      "all": "Gesamter Zeitraum"
+    }
+  },
+  "privacy": {
+    "title": "Datenschutzerklärung",
+    "lastUpdated": "Zuletzt aktualisiert: {date}",
+    "sections": {
+      "intro": {
+        "title": "Einleitung",
+        "content": "Diese Datenschutzerklärung erläutert, wie {siteName} Ihre Daten bei der Nutzung unseres QR-Code-Generators erhebt, nutzt und schützt."
+      },
+      "operator": {
+        "title": "Verantwortliche Stelle",
+        "content": "Der Verantwortliche für diesen Dienst ist: {companyInfo}. Für Datenschutzanfragen wenden Sie sich an: {contactEmail}."
+      },
+      "collection": {
+        "title": "Erhobene Daten",
+        "content": "Standardmäßig erhebt dieser Dienst keine personenbezogenen Daten. QR-Codes werden direkt in Ihrem Browser generiert. Ein Konto ist nicht erforderlich."
+      },
+      "tracking": {
+        "title": "Scan-Tracking",
+        "content": "Wenn Scan-Tracking für einen QR-Code aktiviert ist, werden beim Aufruf des Kurzlinks folgende Daten erfasst:",
+        "items": {
+          "clicks": "Anzahl der Scans / Klicks",
+          "timestamps": "Datum und Uhrzeit jedes Scans",
+          "browser": "Browsertyp (z. B. Chrome, Firefox)",
+          "os": "Betriebssystem (z. B. Windows, iOS)",
+          "geo": "Ungefährer Standort (nur Land / Region)",
+          "referrer": "Verweisende Website",
+          "unique": "Anonymisierte Zählung eindeutiger Besucher (gehasht, nicht umkehrbar)"
+        },
+        "ipNote": "IP-Adressen werden niemals im Klartext gespeichert. Für die Zählung eindeutiger Besucher wird ein Einweg-Hash mit rotierendem Salt verwendet."
+      },
+      "selfHosted": {
+        "title": "Self-Hosted Analyse",
+        "content": "Diese Instanz nutzt selbst gehostete Analyse. Alle Tracking-Daten werden auf diesem Server gespeichert und nicht an Dritte weitergegeben."
+      },
+      "google": {
+        "title": "Google Analytics",
+        "content": "Diese Website nutzt Google Analytics zur Analyse der Websitenutzung. Google Analytics verwendet Cookies zur Erfassung anonymisierter Daten. Details: https://policies.google.com/privacy."
+      },
+      "cloudflare": {
+        "title": "Cloudflare Web Analytics",
+        "content": "Diese Website nutzt Cloudflare Web Analytics, ein datenschutzfreundliches Analyse-Tool ohne Cookies und ohne personenbezogene Datenerfassung. Mehr: https://www.cloudflare.com/web-analytics/."
+      },
+      "api": {
+        "title": "Öffentliche API",
+        "content": "Diese Instanz bietet eine öffentliche API. API-Anfragen können zur Ratenbegrenzung und Missbrauchsprävention protokolliert werden. Protokolle werden {retentionDays} Tage aufbewahrt."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "content": "Dieser Dienst verwendet nur essenzielle Cookies für Theme- und Spracheinstellungen. Tracking-Cookies werden nur bei aktivierter Drittanbieter-Analyse gesetzt."
+      },
+      "rights": {
+        "title": "Ihre Rechte",
+        "content": "Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer personenbezogenen Daten. Da QR-Codes in Ihrem Browser generiert werden und Tracking optional ist, werden nur minimale Daten gespeichert. Anfragen an: {contactEmail}."
+      },
+      "retention": {
+        "title": "Datenspeicherung",
+        "content": "Scan-Tracking-Daten werden {retentionDays} Tage aufbewahrt und danach automatisch gelöscht. QR-Codes ohne Tracking werden nicht auf dem Server gespeichert."
+      },
+      "changes": {
+        "title": "Änderungen dieser Erklärung",
+        "content": "Wir können diese Datenschutzerklärung gelegentlich aktualisieren. Änderungen werden auf dieser Seite veröffentlicht."
+      }
+    }
+  },
+  "imprint": {
+    "title": "Impressum",
+    "company": "Unternehmen",
+    "address": "Adresse",
+    "contact": "Kontakt",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "register": "Handelsregister",
+    "vatId": "USt-IdNr.",
+    "responsible": "Inhaltlich Verantwortlicher",
+    "notConfigured": "Impressumsinformationen sind nicht konfiguriert. Bitte IMPRINT_*-Umgebungsvariablen setzen."
+  },
+  "theme": {
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "language": {
+    "en": "English",
+    "de": "Deutsch"
+  },
+  "footer": {
+    "madeWith": "Self-hosted mit ♥",
+    "source": "Quellcode"
+  }
+}

@@ -1,0 +1,24 @@
+"use client";
+
+import { createContext, useContext, type ReactNode } from "react";
+import type { PublicConfig } from "@/types/config";
+
+const ConfigContext = createContext<PublicConfig | null>(null);
+
+export function ConfigProvider({
+  config,
+  children,
+}: {
+  config: PublicConfig;
+  children: ReactNode;
+}) {
+  return (
+    <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>
+  );
+}
+
+export function useConfig(): PublicConfig {
+  const ctx = useContext(ConfigContext);
+  if (!ctx) throw new Error("useConfig must be used within ConfigProvider");
+  return ctx;
+}
