@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { sql } from "kysely";
+import { withCors, handlePreflight } from "@/lib/cors";
+
+export async function OPTIONS(request: Request) {
+  return handlePreflight(request);
+}
 
 /**
  * GET /api/stats/[token]
@@ -53,11 +58,14 @@ export async function GET(
     ""
   ).replace(/\/+$/, "");
 
-  return NextResponse.json({
-    totalScans: Number(totalScans?.count ?? 0),
-    uniqueVisitors: Number(uniqueVisitors?.count ?? 0),
-    shortLinkUrl: `${baseUrl}/s/${shortLinkId}`,
-    qrType: qr.type,
-    createdAt: qr.created_at,
-  });
+  return withCors(
+    _request,
+    NextResponse.json({
+      totalScans: Number(totalScans?.count ?? 0),
+      uniqueVisitors: Number(uniqueVisitors?.count ?? 0),
+      shortLinkUrl: `${baseUrl}/s/${shortLinkId}`,
+      qrType: qr.type,
+      createdAt: qr.created_at,
+    })
+  );
 }

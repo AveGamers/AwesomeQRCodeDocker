@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import { getDb } from "@/lib/db";
+import { withCors, handlePreflight } from "@/lib/cors";
+
+export async function OPTIONS(request: Request) {
+  return handlePreflight(request);
+}
 
 /**
  * POST /api/shortlink
@@ -64,13 +69,16 @@ export async function POST(request: Request) {
       process.env.PUBLIC_BASE_URL || "http://localhost:3000"
     ).replace(/\/+$/, "");
 
-    return NextResponse.json({
-      qrId,
-      shortId,
-      shortLinkUrl: `${baseUrl}/s/${shortId}`,
-      statsToken,
-      statsUrl: `${publicBase}/stats/${statsToken}`,
-    });
+    return withCors(
+      request,
+      NextResponse.json({
+        qrId,
+        shortId,
+        shortLinkUrl: `${baseUrl}/s/${shortId}`,
+        statsToken,
+        statsUrl: `${publicBase}/stats/${statsToken}`,
+      })
+    );
   } catch (err) {
     console.error("shortlink creation error:", err);
     return NextResponse.json(

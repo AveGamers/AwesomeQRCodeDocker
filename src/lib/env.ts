@@ -16,6 +16,17 @@ const envSchema = z.object({
   // Public domain / URLs
   PUBLIC_BASE_URL: z.string().url().default("http://localhost:3000"),
   SHORT_LINK_DOMAIN: z.string().default(""),
+  BASE_PATH: z.string().default(""),
+
+  // Reverse proxy
+  TRUST_PROXY: boolStr,
+  TRUSTED_PROXIES: z.string().default(""),
+
+  // CORS
+  CORS_ALLOWED_ORIGINS: z.string().default(""),
+  CORS_ALLOWED_METHODS: z.string().default("GET,POST,OPTIONS"),
+  CORS_ALLOWED_HEADERS: z.string().default("Content-Type,Authorization"),
+  CORS_MAX_AGE: z.coerce.number().default(86400),
 
   // Feature toggles
   FEATURE_ANALYTICS: boolStr,

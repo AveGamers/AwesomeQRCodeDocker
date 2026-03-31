@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import QRCode from "qrcode";
+import { withCors, handlePreflight } from "@/lib/cors";
+
+export async function OPTIONS(request: Request) {
+  return handlePreflight(request);
+}
 
 /**
  * POST /api/qr
@@ -12,16 +17,22 @@ export async function POST(request: Request) {
     const { data, format = "png", size = 300, errorCorrection = "M" } = body;
 
     if (!data || typeof data !== "string") {
-      return NextResponse.json(
-        { error: "Missing or invalid 'data' field" },
-        { status: 400 }
+      return withCors(
+        request,
+        NextResponse.json(
+          { error: "Missing or invalid 'data' field" },
+          { status: 400 }
+        )
       );
     }
 
     if (data.length > 4296) {
-      return NextResponse.json(
-        { error: "Data exceeds maximum QR code capacity" },
-        { status: 400 }
+      return withCors(
+        request,
+        NextResponse.json(
+          { error: "Data exceeds maximum QR code capacity" },
+          { status: 400 }
+        )
       );
     }
 
@@ -35,9 +46,12 @@ export async function POST(request: Request) {
         width: size,
         errorCorrectionLevel: ecLevel,
       });
-      return new Response(svg, {
-        headers: { "Content-Type": "image/svg+xml" },
-      });
+      return withCors(
+        request,
+        new NextResponse(svg, {
+          headers: { "Content-Type": "image/svg+xml" },
+        })
+      );
     }
 
     // Default: PNG buffer
@@ -46,16 +60,22 @@ export async function POST(request: Request) {
       errorCorrectionLevel: ecLevel,
     });
 
-    return new Response(new Uint8Array(pngBuffer), {
-      headers: {
-        "Content-Type": "image/png",
-        "Cache-Control": "public, max-age=86400",
-      },
-    });
+    return withCors(
+      request,
+      new NextResponse(new Uint8Array(pngBuffer), {
+        headers: {
+          "Content-Type": "image/png",
+          "Cache-Control": "public, max-age=86400",
+        },
+      })
+    );
   } catch (err) {
-    return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Internal error" },
-      { status: 500 }
+    return withCors(
+      request,
+      NextResponse.json(
+        { error: err instanceof Error ? err.message : "Internal error" },
+        { status: 500 }
+      )
     );
   }
 }

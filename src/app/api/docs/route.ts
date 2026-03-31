@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
+import { withCors, handlePreflight } from "@/lib/cors";
+
+export async function OPTIONS(request: Request) {
+  return handlePreflight(request);
+}
 
 /**
  * GET /api/docs
  * Serve the OpenAPI / Swagger specification.
  * Only available when FEATURE_SWAGGER=true.
  */
-export async function GET() {
+export async function GET(request: Request) {
   if (process.env.FEATURE_SWAGGER !== "true") {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -126,7 +131,5 @@ export async function GET() {
     },
   };
 
-  return NextResponse.json(spec, {
-    headers: { "Access-Control-Allow-Origin": "*" },
-  });
+  return withCors(request, NextResponse.json(spec));
 }
