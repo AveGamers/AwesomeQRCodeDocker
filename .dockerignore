@@ -1,0 +1,16 @@
+node_modules/
+.next/
+.git/
+.github/
+data/
+*.db
+*.sqlite
+.env
+.env.local
+.env.*.local
+docs/
+README.md
+LICENSE
+docker-compose*.yml
+.dockerignore
+Dockerfile
