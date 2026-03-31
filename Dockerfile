@@ -1,5 +1,5 @@
 # ── Build stage ──────────────────────────────────
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
 RUN apk add --no-cache libc6-compat
 
 FROM base AS deps
@@ -20,7 +20,7 @@ ENV NODE_ENV=production
 RUN npm run build
 
 # ── Production stage ─────────────────────────────
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 
 ENV NEXT_TELEMETRY_DISABLED=1
