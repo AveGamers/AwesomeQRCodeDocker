@@ -1,19 +1,18 @@
 ##
-## Awesome QR Code Docker – Compose Profiles
+## Awesome QR Code Docker – Default (SQLite)
 ##
 ## Usage:
-##   Default (SQLite, no extras):
-##     docker compose up -d
+##   docker compose up -d
 ##
-##   With PostgreSQL:
-##     docker compose --profile postgres up -d
+## After changing .env, recreate containers to pick up new values:
+##   docker compose up -d --force-recreate
 ##
-##   With MariaDB:
-##     docker compose --profile mariadb up -d
+## For PostgreSQL or MariaDB, see:
+##   docker-compose.postgres.yml
+##   docker-compose.mariadb.yml
 ##
 
 services:
-  # ── App ────────────────────────────────────────
   app:
     build: .
     image: ghcr.io/${GITHUB_REPOSITORY:-awesome-qr-code-docker}:latest
@@ -27,7 +26,6 @@ services:
       - NODE_ENV=production
     volumes:
       - app-data:/app/data
-    depends_on: []
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
       interval: 30s
@@ -35,50 +33,5 @@ services:
       retries: 3
       start_period: 10s
 
-  # ── PostgreSQL (optional) ──────────────────────
-  postgres:
-    image: postgres:16-alpine
-    container_name: awesome-qr-postgres
-    restart: unless-stopped
-    profiles:
-      - postgres
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-awesome_qr}
-      POSTGRES_USER: ${POSTGRES_USER:-awesome_qr}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-awesome_qr}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # ── MariaDB (optional) ─────────────────────────
-  mariadb:
-    image: mariadb:11
-    container_name: awesome-qr-mariadb
-    restart: unless-stopped
-    profiles:
-      - mariadb
-    environment:
-      MARIADB_DATABASE: ${MARIADB_DATABASE:-awesome_qr}
-      MARIADB_USER: ${MARIADB_USER:-awesome_qr}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-changeme}
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-rootchangeme}
-    volumes:
-      - mariadb-data:/var/lib/mysql
-    ports:
-      - "${MARIADB_PORT:-3306}:3306"
-    healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
 volumes:
   app-data:
-  postgres-data:
-  mariadb-data:

@@ -168,7 +168,12 @@ export function QRGenerator() {
               onInstanceReady={onInstanceReady}
             />
             <div className="mt-4">
-              <QRExport qrInstance={qrInstance} siteName={config.siteName} />
+              <QRExport
+                qrInstance={qrInstance}
+                siteName={config.siteName}
+                data={trackingEnabled && shortLink ? shortLink : payload}
+                style={style}
+              />
             </div>
           </div>
         </div>

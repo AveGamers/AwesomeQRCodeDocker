@@ -20,12 +20,6 @@ export function Header() {
         </Link>
 
         <nav className="flex items-center gap-1 text-sm">
-          <Link
-            href="/generate"
-            className="rounded-md px-3 py-1.5 transition-colors hover:bg-accent"
-          >
-            {t("generate")}
-          </Link>
           {config.featureSwagger && (
             // eslint-disable-next-line @next/next/no-html-link-for-pages
             <a
