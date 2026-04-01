@@ -5,13 +5,12 @@ import { Download } from "lucide-react";
 import type { QRStyleOptions } from "@/types/qr";
 
 interface Props {
-  qrInstance: unknown;
   siteName: string;
   data: string;
   style: QRStyleOptions;
 }
 
-export function QRExport({ qrInstance, siteName, data, style }: Props) {
+export function QRExport({ siteName, data, style }: Props) {
   const t = useTranslations("generator.export");
 
   async function downloadFile(ext: "png" | "svg") {

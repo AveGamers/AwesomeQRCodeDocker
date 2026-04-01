@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useConfig } from "@/components/config-provider";
 import { CopyButton } from "@/components/copy-button";
@@ -30,7 +30,6 @@ export function QRGenerator() {
   );
   const [shortLink, setShortLink] = useState<string | null>(null);
   const [statsLink, setStatsLink] = useState<string | null>(null);
-  const [qrInstance, setQRInstance] = useState<unknown>(null);
   const [creating, setCreating] = useState(false);
 
   // Build payload from current fields
@@ -41,10 +40,6 @@ export function QRGenerator() {
   } catch {
     // incomplete fields, no payload yet
   }
-
-  const onInstanceReady = useCallback((inst: unknown) => {
-    setQRInstance(inst);
-  }, []);
 
   function handleTypeChange(newType: QRType) {
     setQRType(newType);
@@ -165,11 +160,9 @@ export function QRGenerator() {
             <QRPreview
               data={trackingEnabled && shortLink ? shortLink : payload}
               style={style}
-              onInstanceReady={onInstanceReady}
             />
             <div className="mt-4">
               <QRExport
-                qrInstance={qrInstance}
                 siteName={config.siteName}
                 data={trackingEnabled && shortLink ? shortLink : payload}
                 style={style}

@@ -7,6 +7,7 @@ export interface PublicConfig {
   shortLinkDomain: string;
   featureAnalytics: boolean;
   featureSwagger: boolean;
+  featureExtendedPrivacy: boolean;
   trackingDefaultEnabled: boolean;
   defaultTheme: string;
   primaryColor: string;

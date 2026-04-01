@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ConfigProvider } from "@/components/config-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { AnalyticsScripts } from "@/components/analytics-scripts";
 import { getPublicConfig } from "@/lib/env";
 import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
@@ -62,33 +63,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages();
   const config = getPublicConfig();
 
-  const gaId = config.googleAnalyticsId;
-  const cfToken = config.cloudflareAnalyticsToken;
-
   return (
     <html lang={locale} suppressHydrationWarning>
-      <head>
-        {gaId && (
-          <>
-            <script
-              async
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${gaId}');`,
-              }}
-            />
-          </>
-        )}
-        {cfToken && (
-          <script
-            defer
-            src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon={`{"token":"${cfToken}"}`}
-          />
-        )}
-      </head>
       <body className="min-h-screen flex flex-col antialiased">
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
@@ -96,6 +72,7 @@ export default async function LocaleLayout({ children, params }: Props) {
               <Header />
               <main className="flex-1">{children}</main>
               <Footer />
+              <AnalyticsScripts />
             </ConfigProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
