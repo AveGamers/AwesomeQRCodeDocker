@@ -294,5 +294,10 @@
   "footer": {
     "madeWith": "Self-hosted with ♥",
     "source": "Source Code"
+  },
+  "cookieConsent": {
+    "message": "This site uses cookies for analytics (Google Analytics / Cloudflare Web Analytics). Do you agree to their use?",
+    "accept": "Accept",
+    "decline": "Decline"
   }
 }

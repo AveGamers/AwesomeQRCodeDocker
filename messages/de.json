@@ -294,5 +294,10 @@
   "footer": {
     "madeWith": "Self-hosted mit ♥",
     "source": "Quellcode"
+  },
+  "cookieConsent": {
+    "message": "Diese Seite verwendet Cookies für Analyse-Zwecke (Google Analytics / Cloudflare Web Analytics). Stimmen Sie der Nutzung zu?",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen"
   }
 }

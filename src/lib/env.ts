@@ -32,6 +32,7 @@ const envSchema = z.object({
   FEATURE_ANALYTICS: boolStr,
   FEATURE_SWAGGER: boolStr,
   FEATURE_GEOIP: boolStr,
+  FEATURE_EXTENDED_PRIVACY: boolStr,
 
   // Database (only needed when analytics is on)
   DATABASE_DIALECT: z
@@ -135,6 +136,7 @@ export function getPublicConfig() {
     shortLinkDomain: env.SHORT_LINK_DOMAIN || env.PUBLIC_BASE_URL,
     featureAnalytics: env.FEATURE_ANALYTICS,
     featureSwagger: env.FEATURE_SWAGGER,
+    featureExtendedPrivacy: env.FEATURE_EXTENDED_PRIVACY,
     trackingDefaultEnabled: env.TRACKING_DEFAULT_ENABLED,
     defaultTheme: env.DEFAULT_THEME,
     primaryColor: env.PRIMARY_COLOR,
