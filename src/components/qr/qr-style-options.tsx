@@ -218,6 +218,7 @@ export function QRStyleOptionsPanel({ style, onChange }: Props) {
             onChange={(e) => set("size", Number(e.target.value))}
             className="w-full"
           />
+          <p className="mt-1 text-xs text-muted-foreground">{t("sizeHint")}</p>
         </div>
         <div>
           <label className={labelCls}>{t("margin")} — {style.margin}px</label>
@@ -263,11 +264,13 @@ export function QRStyleOptionsPanel({ style, onChange }: Props) {
               if (!file) return;
               const reader = new FileReader();
               reader.onload = () => {
-                set("logoDataUrl", reader.result as string);
-                // auto-raise error correction when logo is present
+                const dataUrl = reader.result as string;
+                // Batch both changes to avoid the second overwriting the first
+                const updates: Partial<QRStyleOptions> = { logoDataUrl: dataUrl };
                 if (style.errorCorrectionLevel !== "H") {
-                  set("errorCorrectionLevel", "H");
+                  updates.errorCorrectionLevel = "H";
                 }
+                onChange({ ...style, ...updates });
               };
               reader.readAsDataURL(file);
             }}

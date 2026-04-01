@@ -1,8 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import type { QRStyleOptions } from "@/types/qr";
+
+function useDebounce<T>(value: T, delay: number): T {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+  return debounced;
+}
 
 interface Props {
   data: string;
@@ -15,48 +24,59 @@ export function QRPreview({ data, style, onInstanceReady }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const instanceRef = useRef<unknown>(null);
   const [warning, setWarning] = useState(false);
+  const [visible, setVisible] = useState(true);
+
+  // Debounce inputs to avoid flickering during rapid changes
+  const stableInput = useMemo(() => ({ data, style }), [data, style]);
+  const debounced = useDebounce(stableInput, 350);
 
   const render = useCallback(async () => {
-    if (!containerRef.current || !data) return;
+    if (!containerRef.current || !debounced.data) return;
+
+    // Fade out
+    setVisible(false);
 
     const QRCodeStyling = (await import("qr-code-styling")).default;
+    const s = debounced.style;
 
     const dotsOptions: Record<string, unknown> = {
-      type: style.dotStyle,
+      type: s.dotStyle,
     };
 
-    if (style.gradientEnabled) {
+    if (s.gradientEnabled) {
       dotsOptions.gradient = {
-        type: style.gradientType,
+        type: s.gradientType,
         colorStops: [
-          { offset: 0, color: style.fgColor },
-          { offset: 1, color: style.gradientColorEnd },
+          { offset: 0, color: s.fgColor },
+          { offset: 1, color: s.gradientColorEnd },
         ],
       };
     } else {
-      dotsOptions.color = style.fgColor;
+      dotsOptions.color = s.fgColor;
     }
 
+    const PREVIEW_SIZE = 300;
+
     const options: Record<string, unknown> = {
-      width: style.size,
-      height: style.size,
-      data,
-      margin: style.margin,
+      width: PREVIEW_SIZE,
+      height: PREVIEW_SIZE,
+      data: debounced.data,
+      margin: s.margin,
       qrOptions: {
-        errorCorrectionLevel: style.errorCorrectionLevel,
+        errorCorrectionLevel: s.errorCorrectionLevel,
       },
       dotsOptions,
-      backgroundOptions: { color: style.bgColor },
-      cornersSquareOptions: { type: style.cornerSquareStyle },
-      cornersDotOptions: { type: style.cornerDotStyle },
+      backgroundOptions: { color: s.bgColor },
+      cornersSquareOptions: { type: s.cornerSquareStyle },
+      cornersDotOptions: { type: s.cornerDotStyle },
     };
 
-    if (style.logoDataUrl) {
-      options.image = style.logoDataUrl;
+    if (s.logoDataUrl) {
+      options.image = s.logoDataUrl;
       options.imageOptions = {
         crossOrigin: "anonymous",
         margin: 4,
-        imageSize: style.logoRatio,
+        imageSize: s.logoRatio,
         hideBackgroundDots: true,
       };
     }
@@ -67,17 +87,20 @@ export function QRPreview({ data, style, onInstanceReady }: Props) {
     instanceRef.current = qr;
     onInstanceReady?.(qr);
 
+    // Fade in after render
+    requestAnimationFrame(() => setVisible(true));
+
     // Simple scannability heuristic: logo > 25% with low EC
     if (
-      style.logoDataUrl &&
-      style.logoRatio > 0.25 &&
-      style.errorCorrectionLevel !== "H"
+      s.logoDataUrl &&
+      s.logoRatio > 0.25 &&
+      s.errorCorrectionLevel !== "H"
     ) {
       setWarning(true);
     } else {
       setWarning(false);
     }
-  }, [data, style, onInstanceReady]);
+  }, [debounced, onInstanceReady]);
 
   useEffect(() => {
     render();
@@ -95,7 +118,8 @@ export function QRPreview({ data, style, onInstanceReady }: Props) {
     <div className="space-y-2">
       <div
         ref={containerRef}
-        className="flex items-center justify-center rounded-lg border border-border bg-white p-4"
+        className="flex items-center justify-center rounded-lg border border-border bg-white p-4 transition-opacity duration-200"
+        style={{ opacity: visible ? 1 : 0 }}
       />
       {warning && (
         <p className="text-xs text-destructive">{t("scanWarning")}</p>

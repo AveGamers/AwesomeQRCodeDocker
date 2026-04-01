@@ -158,6 +158,7 @@
         "H": "High (30%)"
       },
       "size": "Size (px)",
+      "sizeHint": "Only affects download resolution. Preview always uses a fixed size.",
       "margin": "Quiet Zone"
     },
     "tracking": {
@@ -178,7 +179,8 @@
     "export": {
       "title": "Export",
       "png": "Download PNG",
-      "svg": "Download SVG"
+      "svg": "Download SVG",
+      "svgLogoHint": "SVG download is only available when the logo is in SVG format."
     }
   },
   "stats": {
