@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { ensureDbReady } from "@/lib/db";
 import { sql } from "kysely";
 import { withCors, handlePreflight } from "@/lib/cors";
 
@@ -20,7 +20,7 @@ export async function GET(
   }
 
   const { token } = await params;
-  const db = getDb();
+  const db = await ensureDbReady();
 
   const qr = await db
     .selectFrom("tracked_qrs")

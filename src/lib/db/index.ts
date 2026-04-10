@@ -5,10 +5,12 @@ import {
   SqliteDialect,
 } from "kysely";
 import type { Database } from "./schema";
+import { createTables } from "./migrate";
 
 type Dialect = "postgres" | "mysql" | "sqlite";
 
 let _db: Kysely<Database> | null = null;
+let _dbInitPromise: Promise<void> | null = null;
 
 function createDialect(dialect: Dialect, url: string) {
   switch (dialect) {
@@ -39,4 +41,15 @@ export function getDb(): Kysely<Database> {
 
   _db = new Kysely<Database>({ dialect: createDialect(dialect, url) });
   return _db;
+}
+
+export async function ensureDbReady(): Promise<Kysely<Database>> {
+  const db = getDb();
+
+  if (!_dbInitPromise) {
+    _dbInitPromise = createTables(db);
+  }
+
+  await _dbInitPromise;
+  return db;
 }

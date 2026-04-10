@@ -1,5 +1,5 @@
 import { createHash } from "crypto";
-import { getDb } from "@/lib/db";
+import { ensureDbReady } from "@/lib/db";
 import { UAParser } from "ua-parser-js";
 
 interface TrackingConfig {
@@ -22,7 +22,7 @@ export async function recordScan(
   request: Request,
   config: TrackingConfig
 ) {
-  const db = getDb();
+  const db = await ensureDbReady();
   const ua = request.headers.get("user-agent") || "";
   const parser = new UAParser(ua);
   const browserResult = parser.getBrowser();
