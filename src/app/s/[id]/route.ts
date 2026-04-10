@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { ensureDbReady } from "@/lib/db";
 import { recordScan } from "@/lib/analytics/tracker";
+import { detectTargetPageLanguage, renderTrackedTargetPage } from "@/lib/qr/target-page";
+import { isTrackedTargetPageType } from "@/lib/qr/target-details";
 
 /**
  * GET /s/[id]
@@ -23,8 +25,16 @@ export async function GET(
 
   const link = await db
     .selectFrom("short_links")
-    .selectAll()
-    .where("id", "=", id)
+    .innerJoin("tracked_qrs", "tracked_qrs.id", "short_links.qr_id")
+    .select([
+      "short_links.id as id",
+      "short_links.target_url as target_url",
+      "short_links.is_active as is_active",
+      "tracked_qrs.type as qr_type",
+      "tracked_qrs.content as qr_content",
+      "tracked_qrs.fields_json as qr_fields_json",
+    ])
+    .where("short_links.id", "=", id)
     .executeTakeFirst();
 
   if (!link) {
@@ -35,25 +45,19 @@ export async function GET(
     return renderInactiveLinkPage();
   }
 
-  // Validate target URL before redirect to prevent open redirects
-  let targetUrl: string;
-  let isRedirectable = true;
-  try {
-    const parsed = new URL(link.target_url);
-    if (!["http:", "https:", "tel:", "mailto:", "sms:", "geo:"].includes(parsed.protocol)) {
+  const isTargetPage = isTrackedTargetPageType(link.qr_type);
+  let targetUrl = link.target_url;
+
+  if (!isTargetPage) {
+    try {
+      const parsed = new URL(link.target_url);
+      if (!["http:", "https:", "tel:", "mailto:", "sms:", "geo:"].includes(parsed.protocol)) {
+        return NextResponse.json({ error: "Invalid target" }, { status: 400 });
+      }
+      targetUrl = parsed.toString();
+    } catch {
       return NextResponse.json({ error: "Invalid target" }, { status: 400 });
     }
-    targetUrl = parsed.toString();
-  } catch {
-    // Non-URL content (text, vcard, etc.) — show inline
-    isRedirectable = false;
-    targetUrl = link.target_url;
-  }
-
-  if (!isRedirectable) {
-    return new Response(targetUrl, {
-      headers: { "Content-Type": "text/plain; charset=utf-8" },
-    });
   }
 
   const url = new URL(request.url);
@@ -62,7 +66,11 @@ export async function GET(
 
   // ── Extended privacy: show interstitial ────────────────────
   if (extendedPrivacy && !consent) {
-    return renderInterstitial(id, targetUrl);
+    return renderInterstitial(
+      id,
+      isTargetPage ? `${new URL(request.url).origin}/s/${encodeURIComponent(id)}` : targetUrl,
+      isTargetPage
+    );
   }
 
   // ── Determine tracking scope ───────────────────────────────
@@ -84,14 +92,42 @@ export async function GET(
     console.error("Failed to record scan:", err)
   );
 
+  if (isTargetPage) {
+    const siteName = process.env.SITE_NAME || "Awesome QR Code";
+    const primaryColor = process.env.PRIMARY_COLOR || "#6366f1";
+    const language = detectTargetPageLanguage(request);
+
+    return new Response(
+      renderTrackedTargetPage({
+        type: link.qr_type,
+        content: link.qr_content,
+        fieldsJson: link.qr_fields_json,
+        siteName,
+        primaryColor,
+        shortId: id,
+        language,
+      }),
+      {
+        headers: {
+          "Content-Type": "text/html; charset=utf-8",
+          "Cache-Control": "no-store",
+        },
+      }
+    );
+  }
+
   return NextResponse.redirect(targetUrl, 302);
 }
 
 // ── Interstitial HTML ──────────────────────────────────────────
-function renderInterstitial(id: string, targetUrl: string): Response {
+function renderInterstitial(id: string, targetUrl: string, isTargetPage: boolean): Response {
   // Detect preferred language from Accept-Language header
   const siteName = process.env.SITE_NAME || "Awesome QR Code";
   const primaryColor = process.env.PRIMARY_COLOR || "#6366f1";
+  const title = isTargetPage
+    ? "Open target page / Zielseite öffnen"
+    : "Redirect / Weiterleitung";
+  const primaryCta = isTargetPage ? "Open / Öffnen" : "Visit / Aufrufen";
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -120,11 +156,11 @@ function renderInterstitial(id: string, targetUrl: string): Response {
 </head>
 <body>
   <div class="card">
-    <h1>Redirect / Weiterleitung</h1>
+    <h1>${title}</h1>
     <p class="url">${escapeHtml(targetUrl)}</p>
     <div class="buttons">
       <a class="btn btn-primary" href="/s/${encodeURIComponent(id)}?consent=full">
-        Visit / Aufrufen
+        ${primaryCta}
       </a>
       <p class="hint">Includes anonymous usage statistics / Inkl. anonymer Nutzungsstatistik</p>
       <a class="btn btn-secondary" href="/s/${encodeURIComponent(id)}?consent=minimal">
