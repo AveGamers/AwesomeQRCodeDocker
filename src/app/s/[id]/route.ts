@@ -31,7 +31,7 @@ export async function GET(
     return NextResponse.json({ error: "Short link not found" }, { status: 404 });
   }
 
-  if (!link.is_active) {
+  if (!link.is_active || link.is_active === 0) {
     return renderInactiveLinkPage();
   }
 

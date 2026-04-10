@@ -159,7 +159,8 @@
       },
       "size": "Size (px)",
       "sizeHint": "Only affects download resolution. Preview always uses a fixed size.",
-      "margin": "Quiet Zone"
+      "margin": "Quiet Zone",
+      "embedTargetLabel": "Embed target link into QR image"
     },
     "tracking": {
       "title": "Tracking & Short Link",
@@ -174,9 +175,19 @@
       "activationWarning": "This QR code already points to the tracking link, but it will only work after you activate it.",
       "fillFieldsFirst": "Enter the final target first. A draft tracking link is prepared automatically.",
       "enabledProsTitle": "Tracking enabled",
-      "enabledProsText": "Uses a short link, provides scan statistics and can enforce privacy steps before redirecting.",
+      "featureShortLink": "Uses a short link instead of embedding the full target directly.",
+      "featureClicks": "Counts scans/clicks for this QR code.",
+      "featureTimestamps": "Stores scan timestamps for time-based statistics.",
+      "featureBrowser": "Captures browser data for device insights.",
+      "featureOs": "Captures operating system data.",
+      "featureGeo": "Can include approximate geographic information.",
+      "featureReferrer": "Can record the referrer source.",
+      "featureUniqueVisitors": "Can estimate unique visitors using hashed IPs.",
+      "featureExtendedPrivacy": "Can show consent and redirect choice pages before forwarding.",
       "disabledProsTitle": "Tracking disabled",
-      "disabledProsText": "Direct target in the QR code, no statistics, but it works immediately without activation.",
+      "noTrackingDirect": "The final target is embedded directly in the QR code.",
+      "noTrackingPermanent": "Works permanently even without a short-link database lookup.",
+      "noTrackingPrivacy": "Best for privacy because no scan statistics are collected.",
       "disabled": "Tracking is disabled by the administrator.",
       "unavailable": "Tracking requires the analytics feature to be enabled."
     },

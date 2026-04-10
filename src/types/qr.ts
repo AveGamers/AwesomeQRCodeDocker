@@ -101,6 +101,7 @@ export type ErrorCorrectionLevel = "L" | "M" | "Q" | "H";
 export interface QRStyleOptions {
   size: number;
   margin: number;
+  embedTargetLabel: boolean;
   errorCorrectionLevel: ErrorCorrectionLevel;
   fgColor: string;
   bgColor: string;
@@ -117,6 +118,7 @@ export interface QRStyleOptions {
 export const DEFAULT_STYLE: QRStyleOptions = {
   size: 300,
   margin: 10,
+  embedTargetLabel: false,
   errorCorrectionLevel: "M",
   fgColor: "#000000",
   bgColor: "#ffffff",
