@@ -1,0 +1,8 @@
+{
+  "name": "Awesome QR Code",
+  "short_name": "QR Code",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1"
+}

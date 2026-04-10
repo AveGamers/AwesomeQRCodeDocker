@@ -1,0 +1,62 @@
+##
+## Awesome QR Code Docker – PostgreSQL
+##
+## Usage:
+##   docker compose -f docker-compose.postgres.yml up -d
+##
+## After changing .env, recreate containers to pick up new values:
+##   docker compose -f docker-compose.postgres.yml up -d --force-recreate
+##
+## Required .env settings:
+##   DATABASE_DIALECT=postgres
+##   DATABASE_URL=postgresql://awesome_qr:changeme@postgres:5432/awesome_qr
+##
+## Multiple app instances can share the same PostgreSQL database
+## by pointing DATABASE_URL to an external host instead of the
+## "postgres" service defined below.
+##
+
+services:
+  app:
+    build: .
+    image: ghcr.io/${GITHUB_REPOSITORY:-awesome-qr-code-docker}:latest
+    container_name: awesome-qr
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - DATABASE_DIALECT=postgres
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-awesome_qr}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-awesome_qr}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:${PORT:-3000}/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: awesome-qr-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-awesome_qr}
+      POSTGRES_USER: ${POSTGRES_USER:-awesome_qr}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-awesome_qr}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:

@@ -1,0 +1,326 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "error": "An error occurred",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "download": "Download",
+    "generate": "Generate",
+    "reset": "Reset",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back",
+    "yes": "Yes",
+    "no": "No",
+    "learnMore": "Learn more"
+  },
+  "nav": {
+    "home": "Home",
+    "generate": "Generator",
+    "stats": "Statistics",
+    "privacy": "Privacy Policy",
+    "imprint": "Imprint",
+    "apiDocs": "API Docs"
+  },
+  "landing": {
+    "hero": {
+      "title": "Create QR Codes Instantly",
+      "subtitle": "Free, fast & fully customizable. Generate QR codes for links, text, WiFi, contacts and more.",
+      "cta": "Start Generating"
+    },
+    "features": {
+      "title": "Features",
+      "types": {
+        "title": "Multiple QR Types",
+        "description": "URLs, text, WiFi, phone, email, SMS, locations, events and contacts."
+      },
+      "customization": {
+        "title": "Full Customization",
+        "description": "Colors, gradients, shapes, logos and styles to match your brand."
+      },
+      "analytics": {
+        "title": "Optional Analytics",
+        "description": "Track scans with short links. View geo data, browsers and click counts."
+      },
+      "privacy": {
+        "title": "Privacy First",
+        "description": "Self-hosted with configurable tracking. Your data stays on your server."
+      },
+      "noAccount": {
+        "title": "No Account Needed",
+        "description": "Generate QR codes instantly without signing up."
+      },
+      "openSource": {
+        "title": "Open Source",
+        "description": "Docker-based, fully configurable via environment variables."
+      }
+    }
+  },
+  "generator": {
+    "title": "QR Code Generator",
+    "type": {
+      "label": "QR Type",
+      "url": "URL",
+      "text": "Text",
+      "wifi": "WiFi",
+      "phone": "Phone",
+      "email": "Email",
+      "sms": "SMS",
+      "geo": "Location",
+      "event": "Event",
+      "vcard": "Contact"
+    },
+    "fields": {
+      "url": {
+        "url": "URL",
+        "urlPlaceholder": "https://example.com"
+      },
+      "text": {
+        "content": "Text Content",
+        "contentPlaceholder": "Enter your text…"
+      },
+      "wifi": {
+        "ssid": "Network Name (SSID)",
+        "password": "Password",
+        "encryption": "Encryption",
+        "hidden": "Hidden Network",
+        "wpa": "WPA/WPA2",
+        "wep": "WEP",
+        "none": "None"
+      },
+      "phone": {
+        "number": "Phone Number",
+        "numberPlaceholder": "+1 234 567 890"
+      },
+      "email": {
+        "to": "Email Address",
+        "toPlaceholder": "name@example.com",
+        "subject": "Subject",
+        "body": "Message"
+      },
+      "sms": {
+        "number": "Phone Number",
+        "numberPlaceholder": "+1 234 567 890",
+        "message": "Message"
+      },
+      "geo": {
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "query": "Search Query (optional)"
+      },
+      "event": {
+        "title": "Event Title",
+        "location": "Location",
+        "startDate": "Start Date & Time",
+        "endDate": "End Date & Time",
+        "description": "Description"
+      },
+      "vcard": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "phone": "Phone",
+        "email": "Email",
+        "organization": "Organization",
+        "url": "Website",
+        "address": "Address"
+      }
+    },
+    "style": {
+      "title": "Style Options",
+      "colors": "Colors",
+      "foreground": "Foreground",
+      "background": "Background",
+      "gradientEnabled": "Enable Gradient",
+      "gradientType": "Gradient Type",
+      "gradientColorEnd": "Gradient End Color",
+      "linear": "Linear",
+      "radial": "Radial",
+      "dotStyle": "Dot Style",
+      "cornerSquareStyle": "Corner Square Style",
+      "cornerDotStyle": "Corner Dot Style",
+      "styles": {
+        "square": "Square",
+        "rounded": "Rounded",
+        "dots": "Dots",
+        "classy": "Classy",
+        "classyRounded": "Classy Rounded",
+        "extraRounded": "Extra Rounded",
+        "dot": "Dot"
+      },
+      "logo": "Logo Overlay",
+      "logoUpload": "Upload Image",
+      "logoRemove": "Remove",
+      "logoHint": "Transparent PNG recommended. Max {ratio}% of QR area.",
+      "errorCorrection": "Error Correction",
+      "ecLevels": {
+        "L": "Low (7%)",
+        "M": "Medium (15%)",
+        "Q": "Quartile (25%)",
+        "H": "High (30%)"
+      },
+      "size": "Size (px)",
+      "sizeHint": "Only affects download resolution. Preview always uses a fixed size.",
+      "margin": "Quiet Zone",
+      "embedTargetLabel": "Embed target link into QR image"
+    },
+    "tracking": {
+      "title": "Tracking & Short Link",
+      "enable": "Enable scan tracking",
+      "enableHint": "Creates a tracked short link with scan statistics.",
+      "shortLink": "Short Link",
+      "statsLink": "View Statistics",
+      "statsHint": "Share this link to view scan statistics.",
+      "activate": "Activate tracking link",
+      "activating": "Activating...",
+      "active": "Tracking link active",
+      "activationWarning": "This QR code already points to the tracking link, but it will only work after you activate it.",
+      "fillFieldsFirst": "Enter the final target first. A draft tracking link is prepared automatically.",
+      "enabledProsTitle": "Tracking enabled",
+      "featureShortLink": "Uses a short link instead of embedding the full target directly.",
+      "featureClicks": "Counts scans/clicks for this QR code.",
+      "featureTimestamps": "Stores scan timestamps for time-based statistics.",
+      "featureBrowser": "Captures browser data for device insights.",
+      "featureOs": "Captures operating system data.",
+      "featureGeo": "Can include approximate geographic information.",
+      "featureReferrer": "Can record the referrer source.",
+      "featureUniqueVisitors": "Can estimate unique visitors using hashed IPs.",
+      "featureExtendedPrivacy": "Can show consent and redirect choice pages before forwarding.",
+      "disabledProsTitle": "Tracking disabled",
+      "noTrackingDirect": "The final target is embedded directly in the QR code.",
+      "noTrackingPermanent": "Works permanently even without a short-link database lookup.",
+      "noTrackingPrivacy": "Best for privacy because no scan statistics are collected.",
+      "disabled": "Tracking is disabled by the administrator.",
+      "unavailable": "Tracking requires the analytics feature to be enabled."
+    },
+    "preview": {
+      "title": "Preview",
+      "showEmbeddedTarget": "Show target below QR code",
+      "empty": "Configure your QR code to see a preview.",
+      "scanWarning": "This QR code may be hard to scan. Try reducing the logo size or simplifying styles."
+    },
+    "export": {
+      "title": "Export",
+      "png": "Download PNG",
+      "svg": "Download SVG",
+      "svgLogoHint": "SVG download is only available when the logo is in SVG format."
+    }
+  },
+  "stats": {
+    "title": "Scan Statistics",
+    "totalScans": "Total Scans",
+    "uniqueVisitors": "Unique Visitors",
+    "topCountries": "Top Countries",
+    "topBrowsers": "Top Browsers",
+    "topOS": "Top Operating Systems",
+    "topReferrers": "Top Referrers",
+    "timeline": "Scans Over Time",
+    "noData": "No scan data available yet.",
+    "shortLink": "Short Link",
+    "createdAt": "Created",
+    "qrType": "QR Type",
+    "target": "Target",
+    "notFound": "Statistics not found. The link may be invalid or expired.",
+    "period": {
+      "label": "Period",
+      "7d": "Last 7 days",
+      "30d": "Last 30 days",
+      "90d": "Last 90 days",
+      "all": "All time"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: {date}",
+    "sections": {
+      "intro": {
+        "title": "Introduction",
+        "content": "This privacy policy explains how {siteName} collects, uses and protects your data when you use our QR code generator service."
+      },
+      "operator": {
+        "title": "Data Controller",
+        "content": "The data controller for this service is: {companyInfo}. For privacy inquiries, contact: {contactEmail}."
+      },
+      "collection": {
+        "title": "Data We Collect",
+        "content": "By default, this service does not collect personal data. QR codes are generated directly in your browser. No account is required."
+      },
+      "tracking": {
+        "title": "Scan Tracking",
+        "content": "When scan tracking is enabled for a QR code, the following data may be collected when the short link is scanned:",
+        "items": {
+          "clicks": "Number of scans / clicks",
+          "timestamps": "Date and time of each scan",
+          "browser": "Browser type (e.g. Chrome, Firefox)",
+          "os": "Operating system (e.g. Windows, iOS)",
+          "geo": "Approximate location (country / region only)",
+          "referrer": "Referring website",
+          "unique": "Anonymised unique visitor count (hashed, non-reversible)"
+        },
+        "ipNote": "IP addresses are never stored in plain text. A one-way hash with a rotating salt is used for unique-visitor counting."
+      },
+      "selfHosted": {
+        "title": "Self-Hosted Analytics",
+        "content": "This instance uses self-hosted analytics. All tracking data is stored on this server and is not shared with third parties."
+      },
+      "google": {
+        "title": "Google Analytics",
+        "content": "This site uses Google Analytics to analyse website usage. Google Analytics uses cookies to collect anonymised data. For details, see Google's privacy policy: https://policies.google.com/privacy."
+      },
+      "cloudflare": {
+        "title": "Cloudflare Web Analytics",
+        "content": "This site uses Cloudflare Web Analytics, a privacy-first analytics service that does not use cookies or collect personal data. More info: https://www.cloudflare.com/web-analytics/."
+      },
+      "api": {
+        "title": "Public API",
+        "content": "This instance provides a public API. API requests may be logged for rate limiting and abuse prevention. Logs are retained for {retentionDays} days."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "content": "This service uses only essential cookies for theme preference and language selection. No tracking cookies are set unless third-party analytics are enabled."
+      },
+      "rights": {
+        "title": "Your Rights",
+        "content": "You have the right to access, correct or delete your personal data. Since QR code generation happens in your browser and tracking is optional, minimal data is stored. For data requests, contact: {contactEmail}."
+      },
+      "retention": {
+        "title": "Data Retention",
+        "content": "Scan tracking data is retained for {retentionDays} days and then automatically deleted. QR codes without tracking are not stored on the server."
+      },
+      "changes": {
+        "title": "Changes to This Policy",
+        "content": "We may update this privacy policy from time to time. Changes will be posted on this page."
+      }
+    }
+  },
+  "imprint": {
+    "title": "Imprint",
+    "company": "Company",
+    "address": "Address",
+    "contact": "Contact",
+    "email": "Email",
+    "phone": "Phone",
+    "register": "Commercial Register",
+    "vatId": "VAT ID",
+    "responsible": "Responsible for Content",
+    "notConfigured": "Imprint information has not been configured. Please set the IMPRINT_* environment variables."
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "en": "English",
+    "de": "Deutsch"
+  },
+  "footer": {
+    "madeWith": "Self-hosted with ♥",
+    "source": "Source Code"
+  },
+  "cookieConsent": {
+    "message": "This site uses cookies for analytics (Google Analytics / Cloudflare Web Analytics). Do you agree to their use?",
+    "accept": "Accept",
+    "decline": "Decline"
+  }
+}
