@@ -1,11 +1,21 @@
 "use client";
 
-import Script from "next/script";
+import { useEffect } from "react";
 import { useConfig } from "@/components/config-provider";
 import {
   CookieConsentBanner,
   useCookieConsent,
 } from "@/components/cookie-consent";
+
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+const GA_SCRIPT_ID = "analytics-ga-src";
+const CF_SCRIPT_ID = "analytics-cf-src";
 
 /**
  * Loads Google Analytics / Cloudflare Web Analytics scripts.
@@ -22,6 +32,44 @@ export function AnalyticsScripts() {
   const cfToken = config.cloudflareAnalyticsToken;
   const hasExternalAnalytics = !!(gaId || cfToken);
   const extendedPrivacy = config.featureExtendedPrivacy;
+  const shouldLoadAnalytics =
+    hasExternalAnalytics && (!extendedPrivacy || consent === true);
+
+  useEffect(() => {
+    function removeScript(id: string) {
+      document.getElementById(id)?.remove();
+    }
+
+    if (!shouldLoadAnalytics) {
+      removeScript(GA_SCRIPT_ID);
+      removeScript(CF_SCRIPT_ID);
+      return;
+    }
+
+    if (gaId && !document.getElementById(GA_SCRIPT_ID)) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function gtag(...args: unknown[]) {
+        window.dataLayer?.push(args);
+      };
+      window.gtag("js", new Date());
+      window.gtag("config", gaId);
+
+      const gaScript = document.createElement("script");
+      gaScript.id = GA_SCRIPT_ID;
+      gaScript.async = true;
+      gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaId)}`;
+      document.head.appendChild(gaScript);
+    }
+
+    if (cfToken && !document.getElementById(CF_SCRIPT_ID)) {
+      const cfScript = document.createElement("script");
+      cfScript.id = CF_SCRIPT_ID;
+      cfScript.defer = true;
+      cfScript.src = "https://static.cloudflareinsights.com/beacon.min.js";
+      cfScript.setAttribute("data-cf-beacon", JSON.stringify({ token: cfToken }));
+      document.head.appendChild(cfScript);
+    }
+  }, [cfToken, gaId, shouldLoadAnalytics]);
 
   // Nothing to load → render nothing
   if (!hasExternalAnalytics) return null;
@@ -34,27 +82,5 @@ export function AnalyticsScripts() {
   // Extended privacy: user declined → no scripts
   if (extendedPrivacy && consent === false) return null;
 
-  // Either no extended privacy, or user accepted → load scripts
-  return (
-    <>
-      {gaId && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-            strategy="afterInteractive"
-          />
-          <Script id="ga-init" strategy="afterInteractive">
-            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${gaId}');`}
-          </Script>
-        </>
-      )}
-      {cfToken && (
-        <Script
-          src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon={`{"token":"${cfToken}"}`}
-          strategy="afterInteractive"
-        />
-      )}
-    </>
-  );
+  return null;
 }
