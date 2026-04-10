@@ -168,11 +168,21 @@
       "shortLink": "Kurzlink",
       "statsLink": "Statistiken ansehen",
       "statsHint": "Teile diesen Link, um Scan-Statistiken einzusehen.",
+      "activate": "Tracking-Link aktivieren",
+      "activating": "Aktiviere...",
+      "active": "Tracking-Link aktiv",
+      "activationWarning": "Dieser QR-Code zeigt bereits auf den Tracking-Link, funktioniert aber erst nach der Aktivierung.",
+      "fillFieldsFirst": "Trage zuerst das endgültige Ziel ein. Ein Tracking-Entwurf wird automatisch vorbereitet.",
+      "enabledProsTitle": "Tracking aktiviert",
+      "enabledProsText": "Verwendet einen Kurzlink, liefert Scan-Statistiken und kann Datenschutz-Schritte vor der Weiterleitung erzwingen.",
+      "disabledProsTitle": "Tracking deaktiviert",
+      "disabledProsText": "Direktes Ziel im QR-Code, keine Statistiken, funktioniert dafür sofort ohne Aktivierung.",
       "disabled": "Tracking ist vom Administrator deaktiviert.",
       "unavailable": "Tracking erfordert die aktivierte Analytics-Funktion."
     },
     "preview": {
       "title": "Vorschau",
+      "showEmbeddedTarget": "Ziel unter dem QR-Code anzeigen",
       "empty": "Konfiguriere deinen QR-Code, um die Vorschau zu sehen.",
       "scanWarning": "Dieser QR-Code könnte schwer zu scannen sein. Versuche, die Logo-Größe zu reduzieren oder den Stil zu vereinfachen."
     },

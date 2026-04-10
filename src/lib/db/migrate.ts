@@ -31,10 +31,24 @@ export async function createTables(db: Kysely<Database>) {
     .addColumn("qr_id", "varchar(21)", (col) => col.notNull())
     .addColumn("target_url", "text", (col) => col.notNull())
     .addColumn("canonical_base_url", "varchar(500)", (col) => col.notNull())
+    .addColumn("is_active", "boolean", (col) =>
+      col.notNull().defaultTo(sql`true`)
+    )
     .addColumn("created_at", "timestamp", (col) =>
       col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
     .execute();
+
+  try {
+    await db.schema
+      .alterTable("short_links")
+      .addColumn("is_active", "boolean", (col) =>
+        col.notNull().defaultTo(sql`true`)
+      )
+      .execute();
+  } catch {
+    // Column already exists on upgraded instances.
+  }
 
   await db.schema
     .createTable("scan_events")

@@ -119,7 +119,7 @@ export function QRPreview({ data, style, onInstanceReady }: Props) {
       <div className="flex justify-center">
         <div
           ref={containerRef}
-          className="inline-flex overflow-hidden rounded-lg transition-opacity duration-200"
+          className="inline-flex overflow-hidden rounded-lg bg-white p-2 transition-opacity duration-200"
           style={{ opacity: visible ? 1 : 0 }}
         />
       </div>

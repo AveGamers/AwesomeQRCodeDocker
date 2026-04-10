@@ -31,6 +31,10 @@ export async function GET(
     return NextResponse.json({ error: "Short link not found" }, { status: 404 });
   }
 
+  if (!link.is_active) {
+    return renderInactiveLinkPage();
+  }
+
   // Validate target URL before redirect to prevent open redirects
   let targetUrl: string;
   let isRedirectable = true;
@@ -128,6 +132,43 @@ function renderInterstitial(id: string, targetUrl: string): Response {
       </a>
       <p class="hint">Only counts the click / Zählt nur den Klick</p>
     </div>
+  </div>
+</body>
+</html>`;
+
+  return new Response(html, {
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
+function renderInactiveLinkPage(): Response {
+  const siteName = process.env.SITE_NAME || "Awesome QR Code";
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>${escapeHtml(siteName)}</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#fafafa;color:#18181b}
+    @media(prefers-color-scheme:dark){body{background:#09090b;color:#fafafa}}
+    .card{max-width:32rem;width:100%;margin:1rem;padding:2rem;border-radius:0.75rem;border:1px solid #e4e4e7;background:#fff}
+    @media(prefers-color-scheme:dark){.card{background:#18181b;border-color:#27272a}}
+    h1{font-size:1.25rem;font-weight:700;margin-bottom:0.75rem}
+    p{font-size:0.95rem;line-height:1.6;color:#52525b}
+    @media(prefers-color-scheme:dark){p{color:#a1a1aa}}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Tracking link not active yet / Tracking-Link noch nicht aktiv</h1>
+    <p>This QR code points to a draft tracking link and will only work after it has been activated by the creator.</p>
+    <p>Dieser QR-Code zeigt auf einen Tracking-Entwurf und funktioniert erst, nachdem er vom Ersteller aktiviert wurde.</p>
   </div>
 </body>
 </html>`;

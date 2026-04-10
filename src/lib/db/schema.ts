@@ -22,6 +22,7 @@ export interface ShortLinksTable {
   qr_id: string;
   target_url: string;
   canonical_base_url: string;
+  is_active: boolean;
   created_at: ColumnType<Date, string | undefined, never>;
 }
 
