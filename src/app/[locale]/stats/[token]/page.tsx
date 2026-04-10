@@ -1,7 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { getDb } from "@/lib/db";
+import { ensureDbReady } from "@/lib/db";
 import { StatsDashboard } from "@/components/stats/stats-dashboard";
 import { sql } from "kysely";
 import type { Metadata } from "next";
@@ -25,7 +25,7 @@ export default async function StatsPage({
     notFound();
   }
 
-  const db = getDb();
+  const db = await ensureDbReady();
 
   // Find the tracked QR by stats token
   const qr = await db

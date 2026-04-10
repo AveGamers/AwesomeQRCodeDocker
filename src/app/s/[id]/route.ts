@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { ensureDbReady } from "@/lib/db";
 import { recordScan } from "@/lib/analytics/tracker";
 
 /**
@@ -19,7 +19,7 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const db = getDb();
+  const db = await ensureDbReady();
 
   const link = await db
     .selectFrom("short_links")

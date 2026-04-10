@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
-import { getDb } from "@/lib/db";
+import { ensureDbReady } from "@/lib/db";
 import { withCors, handlePreflight } from "@/lib/cors";
 
 export async function OPTIONS(request: Request) {
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const db = getDb();
+    const db = await ensureDbReady();
     const qrId = nanoid(21);
     const statsToken = nanoid(32);
     const shortId = nanoid(8);
@@ -68,6 +68,25 @@ export async function POST(request: Request) {
     const publicBase = (
       process.env.PUBLIC_BASE_URL || "http://localhost:3000"
     ).replace(/\/+$/, "");
+    const availableLocales = (process.env.AVAILABLE_LOCALES || "en,de")
+      .split(",")
+      .map((locale) => locale.trim())
+      .filter(Boolean);
+    const referer = request.headers.get("referer");
+    let localeSegment = process.env.DEFAULT_LOCALE || "en";
+
+    if (referer) {
+      try {
+        const refererUrl = new URL(referer);
+        const maybeLocale = refererUrl.pathname.split("/").filter(Boolean)[0];
+
+        if (availableLocales.includes(maybeLocale)) {
+          localeSegment = maybeLocale;
+        }
+      } catch {
+        // Ignore invalid referrer values.
+      }
+    }
 
     return withCors(
       request,
@@ -76,7 +95,7 @@ export async function POST(request: Request) {
         shortId,
         shortLinkUrl: `${baseUrl}/s/${shortId}`,
         statsToken,
-        statsUrl: `${publicBase}/stats/${statsToken}`,
+        statsUrl: `${publicBase}/${localeSegment}/stats/${statsToken}`,
       })
     );
   } catch (err) {

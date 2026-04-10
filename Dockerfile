@@ -1,13 +1,11 @@
 # ── Build stage ──────────────────────────────────
-FROM node:24-alpine AS base
-RUN apk add --no-cache libc6-compat
+FROM node:24-bookworm-slim AS base
 
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN apk add --no-cache python3 make g++ && \
-    npm ci --ignore-scripts && \
-    npm rebuild better-sqlite3
+RUN --mount=type=cache,target=/root/.npm \
+  npm ci
 
 FROM base AS builder
 WORKDIR /app
@@ -21,14 +19,17 @@ ENV NODE_ENV=production
 RUN npm run build
 
 # ── Production stage ─────────────────────────────
-FROM node:24-alpine AS runner
+FROM node:24-bookworm-slim AS runner
 WORKDIR /app
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser  --system --uid 1001 nextjs
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends curl ca-certificates && \
+  rm -rf /var/lib/apt/lists/* && \
+  groupadd --system --gid 1001 nodejs && \
+  useradd --system --uid 1001 --gid 1001 nextjs
 
 # Copy standalone output
 COPY --from=builder /app/public ./public
@@ -45,6 +46,6 @@ EXPOSE ${PORT:-3000}
 ENV HOSTNAME="0.0.0.0"
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -qO- http://localhost:${PORT:-3000}/api/health || exit 1
+  CMD curl -fsS http://localhost:${PORT:-3000}/api/health || exit 1
 
 CMD ["node", "server.js"]

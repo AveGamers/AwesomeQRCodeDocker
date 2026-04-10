@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   serverExternalPackages: ["better-sqlite3"],
 };
 

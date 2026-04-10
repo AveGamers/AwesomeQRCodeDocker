@@ -8,7 +8,7 @@ export async function migrate() {
   console.log("✅ Database migrations complete");
 }
 
-async function createTables(db: Kysely<Database>) {
+export async function createTables(db: Kysely<Database>) {
   await db.schema
     .createTable("tracked_qrs")
     .ifNotExists()
@@ -81,7 +81,9 @@ async function createTables(db: Kysely<Database>) {
 }
 
 // Allow running directly: tsx src/lib/db/migrate.ts
-migrate().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (process.argv[1]?.includes("src/lib/db/migrate.ts")) {
+  migrate().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

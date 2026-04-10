@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useConfig } from "@/components/config-provider";
 import { CopyButton } from "@/components/copy-button";
 import { QRTypeSelector } from "./qr-type-selector";
@@ -16,6 +16,8 @@ import { ExternalLink, BarChart3 } from "lucide-react";
 
 export function QRGenerator() {
   const t = useTranslations("generator");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
   const config = useConfig();
 
   const [qrType, setQRType] = useState<QRType>("url");
@@ -31,6 +33,7 @@ export function QRGenerator() {
   const [shortLink, setShortLink] = useState<string | null>(null);
   const [statsLink, setStatsLink] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [trackingError, setTrackingError] = useState<string | null>(null);
 
   // Build payload from current fields
   const qrFields = toQRFields(qrType, fields);
@@ -51,6 +54,7 @@ export function QRGenerator() {
   async function handleCreateTrackedQR() {
     if (!payload || !config.featureAnalytics) return;
     setCreating(true);
+    setTrackingError(null);
     try {
       const res = await fetch("/api/shortlink", {
         method: "POST",
@@ -61,12 +65,17 @@ export function QRGenerator() {
           styleOptions: style,
         }),
       });
-      if (!res.ok) throw new Error("Failed to create short link");
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to create short link");
+      }
       setShortLink(data.shortLinkUrl);
-      setStatsLink(data.statsUrl);
+      setStatsLink(data.statsUrl || `/${locale}/stats/${data.statsToken}`);
     } catch (e) {
       console.error(e);
+      setTrackingError(
+        e instanceof Error ? e.message : tCommon("error")
+      );
     } finally {
       setCreating(false);
     }
@@ -117,8 +126,12 @@ export function QRGenerator() {
                   disabled={creating || !!shortLink}
                   className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
                 >
-                  {creating ? t("tracking.title") + "…" : t("common.generate", { ns: "common" })}
+                  {creating ? t("tracking.title") + "…" : tCommon("generate")}
                 </button>
+              )}
+
+              {trackingError && (
+                <p className="text-xs text-destructive">{trackingError}</p>
               )}
 
               {shortLink && (
