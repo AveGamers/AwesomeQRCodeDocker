@@ -31,6 +31,10 @@ function getLocaleSegment(request: Request) {
   return localeSegment;
 }
 
+function toStoredBoolean(value: boolean) {
+  return process.env.DATABASE_DIALECT === "sqlite" ? Number(value) : value;
+}
+
 /**
  * POST /api/shortlink
  * Create a tracked QR code + short link.
@@ -86,7 +90,7 @@ export async function POST(request: Request) {
         qr_id: qrId,
         target_url: content,
         canonical_base_url: baseUrl,
-        is_active: Boolean(activate),
+        is_active: toStoredBoolean(Boolean(activate)),
       })
       .execute();
 
@@ -174,7 +178,7 @@ export async function PUT(request: Request) {
       .set({
         target_url: content,
         canonical_base_url: baseUrl,
-        is_active: Boolean(activate),
+        is_active: toStoredBoolean(Boolean(activate)),
       })
       .where("id", "=", shortId)
       .execute();

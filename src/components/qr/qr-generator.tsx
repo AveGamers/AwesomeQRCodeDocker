@@ -32,7 +32,6 @@ export function QRGenerator() {
   const [trackingEnabled, setTrackingEnabled] = useState(
     config.trackingDefaultEnabled
   );
-  const [showEmbeddedTarget, setShowEmbeddedTarget] = useState(true);
   const [trackedQrId, setTrackedQrId] = useState<string | null>(null);
   const [trackedShortId, setTrackedShortId] = useState<string | null>(null);
   const [draftKey, setDraftKey] = useState<string | null>(null);
@@ -53,6 +52,26 @@ export function QRGenerator() {
 
   const payloadKey = payload ? `${qrType}:${payload}` : null;
   const qrData = trackingEnabled && shortLink ? shortLink : payload;
+  const trackingAdvantages = [
+    t("tracking.featureShortLink"),
+    t("tracking.featureClicks"),
+    ...(config.trackingScope.timestamps ? [t("tracking.featureTimestamps")] : []),
+    ...(config.trackingScope.browser ? [t("tracking.featureBrowser")] : []),
+    ...(config.trackingScope.os ? [t("tracking.featureOs")] : []),
+    ...(config.trackingScope.geo ? [t("tracking.featureGeo")] : []),
+    ...(config.trackingScope.referrer ? [t("tracking.featureReferrer")] : []),
+    ...(config.trackingScope.uniqueVisitors
+      ? [t("tracking.featureUniqueVisitors")]
+      : []),
+    ...(config.featureExtendedPrivacy
+      ? [t("tracking.featureExtendedPrivacy")]
+      : []),
+  ];
+  const noTrackingAdvantages = [
+    t("tracking.noTrackingDirect"),
+    t("tracking.noTrackingPermanent"),
+    t("tracking.noTrackingPrivacy"),
+  ];
 
   function resetTrackingState() {
     setTrackedQrId(null);
@@ -181,39 +200,31 @@ export function QRGenerator() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <QRTypeSelector value={qrType} onChange={handleTypeChange} />
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-6">
-          <div className="rounded-lg border border-border p-4">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)] xl:gap-6">
+        <div className="space-y-4">
+          <div className="rounded-lg border border-border p-4 md:p-5">
             <QRForm type={qrType} fields={fields} onChange={setFields} />
           </div>
 
-          <div className="rounded-lg border border-border p-4">
+          <div className="rounded-lg border border-border p-4 md:p-5">
             <QRStyleOptionsPanel style={style} onChange={setStyle} />
           </div>
         </div>
 
         <div className="space-y-4">
-          <div className="sticky top-20">
+          <div className="xl:sticky xl:top-20">
             <h3 className="mb-2 text-sm font-semibold">{t("preview.title")}</h3>
-            <QRPreview data={qrData} style={style} />
+            <QRPreview
+              data={qrData}
+              style={style}
+              targetLabel={style.embedTargetLabel ? payload : null}
+            />
 
             <div className="mt-4 space-y-4">
-              <div className="rounded-lg border border-border bg-secondary/20 p-4">
-                <label className="flex items-center gap-2 text-sm font-medium">
-                  <input
-                    type="checkbox"
-                    checked={showEmbeddedTarget}
-                    onChange={(e) => setShowEmbeddedTarget(e.target.checked)}
-                    className="rounded border-input"
-                  />
-                  {t("preview.showEmbeddedTarget")}
-                </label>
-              </div>
-
-              {payload && showEmbeddedTarget && (
+              {payload && (
                 <div className="rounded-lg border border-border bg-secondary/20 p-4">
                   <div className="flex items-start gap-3">
                     <div className="min-w-0 flex-1">
@@ -228,7 +239,7 @@ export function QRGenerator() {
               )}
 
               <div className="rounded-lg border border-border bg-secondary/20 p-4 space-y-4">
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <h4 className="text-sm font-semibold">{t("tracking.title")}</h4>
                     <p className="mt-1 text-xs text-muted-foreground">
@@ -252,18 +263,26 @@ export function QRGenerator() {
                 </div>
 
                 {config.featureAnalytics ? (
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-md border border-border bg-background/60 p-3 text-xs text-muted-foreground">
-                      <p className="font-medium text-foreground">
+                  <div className="grid gap-3 lg:grid-cols-2">
+                    <div className="rounded-md border border-border bg-background/60 p-3">
+                      <p className="text-sm font-medium text-foreground">
                         {t("tracking.enabledProsTitle")}
                       </p>
-                      <p className="mt-1">{t("tracking.enabledProsText")}</p>
+                      <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-muted-foreground">
+                        {trackingAdvantages.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
                     </div>
-                    <div className="rounded-md border border-border bg-background/60 p-3 text-xs text-muted-foreground">
-                      <p className="font-medium text-foreground">
+                    <div className="rounded-md border border-border bg-background/60 p-3">
+                      <p className="text-sm font-medium text-foreground">
                         {t("tracking.disabledProsTitle")}
                       </p>
-                      <p className="mt-1">{t("tracking.disabledProsText")}</p>
+                      <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-muted-foreground">
+                        {noTrackingAdvantages.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 ) : (
@@ -327,7 +346,7 @@ export function QRGenerator() {
                   <button
                     onClick={handleActivateTrackedQR}
                     disabled={creating || activating || !shortLink || trackingActivated}
-                    className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
+                    className="inline-flex items-center justify-center gap-1.5 self-start rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
                   >
                     {activating
                       ? t("tracking.activating")
@@ -340,7 +359,13 @@ export function QRGenerator() {
             </div>
 
             <div className="mt-4">
-              <QRExport siteName={config.siteName} data={qrData} style={style} />
+              <QRExport
+                siteName={config.siteName}
+                data={qrData}
+                style={style}
+                targetLabel={payload}
+                trackingEnabled={trackingEnabled}
+              />
             </div>
           </div>
         </div>

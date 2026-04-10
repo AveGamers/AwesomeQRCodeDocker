@@ -27,7 +27,17 @@ function createDialect(dialect: Dialect, url: string) {
     case "sqlite": {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const BetterSqlite3 = require("better-sqlite3");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const fs = require("node:fs");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const pathModule = require("node:path");
       const path = url.replace(/^file:/, "");
+      const directory = pathModule.dirname(path);
+
+      if (directory && directory !== ".") {
+        fs.mkdirSync(directory, { recursive: true });
+      }
+
       return new SqliteDialect({ database: new BetterSqlite3(path) });
     }
   }

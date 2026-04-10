@@ -16,10 +16,11 @@ function useDebounce<T>(value: T, delay: number): T {
 interface Props {
   data: string;
   style: QRStyleOptions;
+  targetLabel?: string | null;
   onInstanceReady?: (instance: unknown) => void;
 }
 
-export function QRPreview({ data, style, onInstanceReady }: Props) {
+export function QRPreview({ data, style, targetLabel, onInstanceReady }: Props) {
   const t = useTranslations("generator.preview");
   const containerRef = useRef<HTMLDivElement>(null);
   const instanceRef = useRef<unknown>(null);
@@ -118,10 +119,16 @@ export function QRPreview({ data, style, onInstanceReady }: Props) {
     <div className="space-y-2">
       <div className="flex justify-center">
         <div
-          ref={containerRef}
-          className="inline-flex overflow-hidden rounded-lg bg-white p-2 transition-opacity duration-200"
+          className="inline-flex flex-col items-center overflow-hidden rounded-lg bg-white p-2 transition-opacity duration-200"
           style={{ opacity: visible ? 1 : 0 }}
-        />
+        >
+          <div ref={containerRef} className="inline-flex" />
+          {style.embedTargetLabel && targetLabel && (
+            <div className="max-w-[300px] px-3 pb-2 pt-1 text-center text-[11px] text-slate-700">
+              <span className="break-all">{targetLabel}</span>
+            </div>
+          )}
+        </div>
       </div>
       {warning && (
         <p className="text-xs text-destructive">{t("scanWarning")}</p>

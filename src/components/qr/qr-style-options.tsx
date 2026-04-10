@@ -233,6 +233,16 @@ export function QRStyleOptionsPanel({ style, onChange }: Props) {
         </div>
       </div>
 
+      <label className="flex items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          checked={style.embedTargetLabel}
+          onChange={(e) => set("embedTargetLabel", e.target.checked)}
+          className="rounded border-input"
+        />
+        {t("embedTargetLabel")}
+      </label>
+
       {/* Logo upload */}
       <div>
         <label className={labelCls}>{t("logo")}</label>

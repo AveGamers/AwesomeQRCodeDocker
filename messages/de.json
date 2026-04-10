@@ -159,7 +159,8 @@
       },
       "size": "Größe (px)",
       "sizeHint": "Beeinflusst nur die Download-Auflösung. Die Vorschau nutzt eine feste Größe.",
-      "margin": "Ruhezone"
+      "margin": "Ruhezone",
+      "embedTargetLabel": "Ziellink in das QR-Bild einbetten"
     },
     "tracking": {
       "title": "Tracking & Kurzlink",
@@ -174,9 +175,19 @@
       "activationWarning": "Dieser QR-Code zeigt bereits auf den Tracking-Link, funktioniert aber erst nach der Aktivierung.",
       "fillFieldsFirst": "Trage zuerst das endgültige Ziel ein. Ein Tracking-Entwurf wird automatisch vorbereitet.",
       "enabledProsTitle": "Tracking aktiviert",
-      "enabledProsText": "Verwendet einen Kurzlink, liefert Scan-Statistiken und kann Datenschutz-Schritte vor der Weiterleitung erzwingen.",
+      "featureShortLink": "Verwendet einen Kurzlink statt das vollständige Ziel direkt einzubetten.",
+      "featureClicks": "Zählt Scans/Klicks für diesen QR-Code.",
+      "featureTimestamps": "Speichert Zeitpunkte für zeitbasierte Statistiken.",
+      "featureBrowser": "Erfasst Browserdaten für Geräte-Einblicke.",
+      "featureOs": "Erfasst Betriebssystemdaten.",
+      "featureGeo": "Kann ungefähre geografische Informationen erfassen.",
+      "featureReferrer": "Kann die Referrer-Quelle speichern.",
+      "featureUniqueVisitors": "Kann eindeutige Besucher per gehashter IP abschätzen.",
+      "featureExtendedPrivacy": "Kann Consent- und Auswahlseiten vor der Weiterleitung anzeigen.",
       "disabledProsTitle": "Tracking deaktiviert",
-      "disabledProsText": "Direktes Ziel im QR-Code, keine Statistiken, funktioniert dafür sofort ohne Aktivierung.",
+      "noTrackingDirect": "Das endgültige Ziel ist direkt im QR-Code eingebettet.",
+      "noTrackingPermanent": "Funktioniert dauerhaft auch ohne Kurzlink-Datenbankabfrage.",
+      "noTrackingPrivacy": "Datenschutzfreundlicher, weil keine Scan-Statistiken gesammelt werden.",
       "disabled": "Tracking ist vom Administrator deaktiviert.",
       "unavailable": "Tracking erfordert die aktivierte Analytics-Funktion."
     },
