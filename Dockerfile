@@ -30,7 +30,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
 RUN apt-get update && \
-  apt-get install -y --no-install-recommends curl ca-certificates && \
+  apt-get install -y --no-install-recommends curl ca-certificates gosu && \
   rm -rf /var/lib/apt/lists/* && \
   groupadd --system --gid 1001 nodejs && \
   useradd --system --uid 1001 --gid 1001 nextjs
@@ -39,12 +39,13 @@ RUN apt-get update && \
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --chown=root:root docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 # Create data directory for SQLite
 RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
 VOLUME /app/data
 
-USER nextjs
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE ${PORT:-3000}
 ENV HOSTNAME="0.0.0.0"
@@ -52,4 +53,5 @@ ENV HOSTNAME="0.0.0.0"
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD curl -fsS http://localhost:${PORT:-3000}/api/health || exit 1
 
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["node", "server.js"]
