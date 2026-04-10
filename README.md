@@ -23,7 +23,7 @@ A self-hosted, feature-rich QR Code Generator built with **Next.js 15**, fully c
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/YOUR_USER/AwesomeQRCodeDocker.git
+git clone https://github.com/AveGamers/AwesomeQRCodeDocker.git
 cd AwesomeQRCodeDocker
 
 # 2. Copy and edit env

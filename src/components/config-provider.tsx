@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import type { PublicConfig } from "@/types/config";
 
 const ConfigContext = createContext<PublicConfig | null>(null);
@@ -12,8 +18,38 @@ export function ConfigProvider({
   config: PublicConfig;
   children: ReactNode;
 }) {
+  const [runtimeConfig, setRuntimeConfig] = useState(config);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function refreshConfig() {
+      try {
+        const res = await fetch("/api/public-config", {
+          cache: "no-store",
+        });
+        if (!res.ok) return;
+
+        const nextConfig = (await res.json()) as PublicConfig;
+        if (!cancelled) {
+          setRuntimeConfig(nextConfig);
+        }
+      } catch {
+        // Keep initial server-provided config if runtime refresh fails.
+      }
+    }
+
+    void refreshConfig();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
-    <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>
+    <ConfigContext.Provider value={runtimeConfig}>
+      {children}
+    </ConfigContext.Provider>
   );
 }
 

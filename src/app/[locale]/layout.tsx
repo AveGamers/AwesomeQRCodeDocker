@@ -9,6 +9,8 @@ import { getPublicConfig } from "@/lib/env";
 import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
