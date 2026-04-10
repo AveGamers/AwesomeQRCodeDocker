@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 import { useConfig } from "@/components/config-provider";
 import { Link } from "@/i18n/navigation";
 
+const REPOSITORY_URL = "https://github.com/AveGamers/AwesomeQRCodeDocker";
+
 export function Footer() {
   const t = useTranslations();
   const config = useConfig();
@@ -25,7 +27,15 @@ export function Footer() {
           {config.footerText ? (
             <span>{config.footerText}</span>
           ) : (
-            <span>{t("footer.madeWith")}</span>
+            <a
+              href={REPOSITORY_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="transition-colors hover:text-foreground"
+              aria-label={t("footer.source")}
+            >
+              {t("footer.madeWith")}
+            </a>
           )}
         </div>
       </div>
