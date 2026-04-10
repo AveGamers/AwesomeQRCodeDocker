@@ -61,7 +61,7 @@ export function QRPreview({ data, style, onInstanceReady }: Props) {
       width: PREVIEW_SIZE,
       height: PREVIEW_SIZE,
       data: debounced.data,
-      margin: s.margin,
+      margin: 0,
       qrOptions: {
         errorCorrectionLevel: s.errorCorrectionLevel,
       },
@@ -116,11 +116,13 @@ export function QRPreview({ data, style, onInstanceReady }: Props) {
 
   return (
     <div className="space-y-2">
-      <div
-        ref={containerRef}
-        className="flex items-center justify-center rounded-lg border border-border bg-white p-4 transition-opacity duration-200"
-        style={{ opacity: visible ? 1 : 0 }}
-      />
+      <div className="flex justify-center">
+        <div
+          ref={containerRef}
+          className="inline-flex overflow-hidden rounded-lg transition-opacity duration-200"
+          style={{ opacity: visible ? 1 : 0 }}
+        />
+      </div>
       {warning && (
         <p className="text-xs text-destructive">{t("scanWarning")}</p>
       )}

@@ -17,6 +17,7 @@ import { ExternalLink, BarChart3 } from "lucide-react";
 export function QRGenerator() {
   const t = useTranslations("generator");
   const tCommon = useTranslations("common");
+  const tStats = useTranslations("stats");
   const locale = useLocale();
   const config = useConfig();
 
@@ -43,6 +44,8 @@ export function QRGenerator() {
   } catch {
     // incomplete fields, no payload yet
   }
+
+  const qrData = trackingEnabled && shortLink ? shortLink : payload;
 
   function handleTypeChange(newType: QRType) {
     setQRType(newType);
@@ -134,30 +137,6 @@ export function QRGenerator() {
                 <p className="text-xs text-destructive">{trackingError}</p>
               )}
 
-              {shortLink && (
-                <div className="space-y-2 rounded-md bg-secondary/50 p-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <ExternalLink className="h-4 w-4 text-primary" />
-                    <span className="font-medium">{t("tracking.shortLink")}:</span>
-                    <code className="text-xs">{shortLink}</code>
-                    <CopyButton text={shortLink} />
-                  </div>
-                  {statsLink && (
-                    <div className="flex items-center gap-2">
-                      <BarChart3 className="h-4 w-4 text-primary" />
-                      <a
-                        href={statsLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-primary underline"
-                      >
-                        {t("tracking.statsLink")}
-                      </a>
-                      <CopyButton text={statsLink} />
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
           ) : (
             <p className="text-xs text-muted-foreground">
@@ -171,13 +150,59 @@ export function QRGenerator() {
           <div className="sticky top-20">
             <h3 className="mb-2 text-sm font-semibold">{t("preview.title")}</h3>
             <QRPreview
-              data={trackingEnabled && shortLink ? shortLink : payload}
+              data={qrData}
               style={style}
             />
+            {payload && (
+              <div className="mt-4 space-y-3 rounded-lg border border-border bg-secondary/20 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      {tStats("target")}
+                    </p>
+                    <p className="mt-1 break-all text-sm">{payload}</p>
+                  </div>
+                  <CopyButton text={payload} className="shrink-0" />
+                </div>
+
+                {shortLink && (
+                  <div className="flex items-start gap-3">
+                    <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        {t("tracking.shortLink")}
+                      </p>
+                      <p className="mt-1 break-all text-sm">{shortLink}</p>
+                    </div>
+                    <CopyButton text={shortLink} className="shrink-0" />
+                  </div>
+                )}
+
+                {statsLink && (
+                  <div className="flex items-start gap-3">
+                    <BarChart3 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        {t("tracking.statsLink")}
+                      </p>
+                      <a
+                        href={statsLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-1 block break-all text-sm text-primary underline"
+                      >
+                        {statsLink}
+                      </a>
+                    </div>
+                    <CopyButton text={statsLink} className="shrink-0" />
+                  </div>
+                )}
+              </div>
+            )}
             <div className="mt-4">
               <QRExport
                 siteName={config.siteName}
-                data={trackingEnabled && shortLink ? shortLink : payload}
+                data={qrData}
                 style={style}
               />
             </div>
