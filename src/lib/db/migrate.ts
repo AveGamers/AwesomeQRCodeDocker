@@ -15,6 +15,7 @@ export async function createTables(db: Kysely<Database>) {
     .addColumn("id", "varchar(21)", (col) => col.primaryKey())
     .addColumn("type", "varchar(20)", (col) => col.notNull())
     .addColumn("content", "text", (col) => col.notNull())
+    .addColumn("fields_json", "text")
     .addColumn("style_options", "text")
     .addColumn("canonical_base_url", "varchar(500)", (col) => col.notNull())
     .addColumn("stats_token", "varchar(32)", (col) => col.notNull().unique())
@@ -23,6 +24,15 @@ export async function createTables(db: Kysely<Database>) {
     )
     .addColumn("expires_at", "timestamp")
     .execute();
+
+  try {
+    await db.schema
+      .alterTable("tracked_qrs")
+      .addColumn("fields_json", "text")
+      .execute();
+  } catch {
+    // Column already exists on upgraded instances.
+  }
 
   await db.schema
     .createTable("short_links")

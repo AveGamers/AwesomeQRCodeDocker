@@ -10,6 +10,7 @@ export interface TrackedQRsTable {
   id: string;
   type: string;
   content: string;
+  fields_json: string | null;
   style_options: string | null;
   canonical_base_url: string;
   stats_token: string;

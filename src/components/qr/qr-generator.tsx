@@ -10,6 +10,7 @@ import { QRStyleOptionsPanel } from "./qr-style-options";
 import { QRPreview } from "./qr-preview";
 import { QRExport } from "./qr-export";
 import { buildPayload } from "@/lib/qr/payloads";
+import { getQRTargetDisplayItems } from "@/lib/qr/target-details";
 import type { QRType, QRStyleOptions } from "@/types/qr";
 import { DEFAULT_STYLE } from "@/types/qr";
 import { ExternalLink, BarChart3 } from "lucide-react";
@@ -18,6 +19,7 @@ export function QRGenerator() {
   const t = useTranslations("generator");
   const tCommon = useTranslations("common");
   const tStats = useTranslations("stats");
+  const tFields = useTranslations("generator.fields");
   const locale = useLocale();
   const config = useConfig();
 
@@ -52,6 +54,9 @@ export function QRGenerator() {
 
   const payloadKey = payload ? `${qrType}:${payload}` : null;
   const qrData = trackingEnabled && shortLink ? shortLink : payload;
+  const targetValues = payload
+    ? getQRTargetDisplayItems(qrFields, tCommon("yes"), tCommon("no"))
+    : [];
   const trackingAdvantages = [
     t("tracking.featureShortLink"),
     t("tracking.featureClicks"),
@@ -120,6 +125,7 @@ export function QRGenerator() {
             shortId: trackedShortId,
             type: qrType,
             content: payload,
+            fieldsData: qrFields,
             styleOptions: style,
             activate: false,
           }),
@@ -177,6 +183,7 @@ export function QRGenerator() {
           shortId: trackedShortId,
           type: qrType,
           content: payload,
+          fieldsData: qrFields,
           styleOptions: style,
           activate: true,
         }),
@@ -226,14 +233,39 @@ export function QRGenerator() {
             <div className="mt-4 space-y-4">
               {payload && (
                 <div className="rounded-lg border border-border bg-secondary/20 p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                        {tStats("target")}
-                      </p>
-                      <p className="mt-1 break-all text-sm">{payload}</p>
-                    </div>
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      {tStats("target")}
+                    </p>
                     <CopyButton text={payload} className="shrink-0" />
+                  </div>
+                  <div className="mt-3 space-y-3">
+                    {targetValues.map((item) => (
+                      <div
+                        key={`${item.labelKey}:${item.value}`}
+                        className="rounded-md border border-border bg-background/60 px-3 py-2"
+                      >
+                        <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                          {tFields(item.labelKey)}
+                        </p>
+                        {item.href ? (
+                          <a
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-1 block break-all text-sm text-primary underline"
+                          >
+                            {item.value}
+                          </a>
+                        ) : (
+                          <p
+                            className={`mt-1 break-all text-sm ${item.multiline ? "whitespace-pre-wrap" : ""}`}
+                          >
+                            {item.value}
+                          </p>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}

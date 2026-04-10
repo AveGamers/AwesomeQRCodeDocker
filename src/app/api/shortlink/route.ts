@@ -50,7 +50,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { type, content, styleOptions, activate = false } = body;
+    const { type, content, fieldsData, styleOptions, activate = false } = body;
 
     if (!type || !content) {
       return NextResponse.json(
@@ -76,6 +76,7 @@ export async function POST(request: Request) {
         id: qrId,
         type,
         content,
+        fields_json: fieldsData ? JSON.stringify(fieldsData) : null,
         style_options: styleOptions ? JSON.stringify(styleOptions) : null,
         canonical_base_url: baseUrl,
         stats_token: statsToken,
@@ -134,6 +135,7 @@ export async function PUT(request: Request) {
       shortId,
       type,
       content,
+      fieldsData,
       styleOptions,
       activate = false,
     } = body;
@@ -167,6 +169,7 @@ export async function PUT(request: Request) {
       .set({
         type,
         content,
+        fields_json: fieldsData ? JSON.stringify(fieldsData) : null,
         style_options: styleOptions ? JSON.stringify(styleOptions) : null,
         canonical_base_url: baseUrl,
       })
