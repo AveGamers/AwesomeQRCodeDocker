@@ -4,7 +4,11 @@ FROM node:24-bookworm-slim AS base
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
+ENV DEBIAN_FRONTEND=noninteractive
 RUN --mount=type=cache,target=/root/.npm \
+  apt-get update && \
+  apt-get install -y --no-install-recommends python3 make g++ && \
+  rm -rf /var/lib/apt/lists/* && \
   npm ci
 
 FROM base AS builder

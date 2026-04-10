@@ -45,6 +45,7 @@ jobs:
         with:
           context: .
           push: false
+          provenance: false
           tags: awesome-qr:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
